@@ -1,10 +1,14 @@
-import { Link } from "expo-router";
-import { SafeAreaView, Text } from "react-native";
+import { SafeAreaView, FlatList } from "react-native";
+import PostListItem from "~/src/components/PostListItem";
+import posts from "~/assets/data/posts.json";
 
-export default function HomePage(){
-    return (
-        <SafeAreaView className="bg-slate-600 flex-1 items-center justify-center m-6">
-            <Text className='text-3xl text-blue-500'>Home Feed</Text>
-        </SafeAreaView>
-    )
+export default function HomePage() {
+  return (
+      <FlatList
+        data={posts}
+        contentContainerStyle={{ gap: 0, maxWidth: 512, width: "100%", alignSelf: 'center' }}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => <PostListItem post={item} />}
+      />
+  );
 }

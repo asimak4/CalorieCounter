@@ -13,9 +13,9 @@ export default function TabsLayout() {
         }}
     />
     <Tabs.Screen
-        name="Other"
+        name="CreatePost"
         options={{
-          headerTitle: "Other",
+          headerTitle: "Create Post",
           tabBarIcon: ({color}) => <AntDesign name="plussquareo" size={24} color={color}/> ,
         }}
     />
