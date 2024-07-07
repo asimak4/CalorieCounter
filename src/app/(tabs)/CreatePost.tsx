@@ -1,17 +1,18 @@
 import { Image, View, Text, TextInput, Pressable } from "react-native";
 import { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
+import DefaultButton from "~/src/components/Button";
 
 {
   /* bg-slate-600 flex-1 items-center justify-center m-6 */
 }
 
-export const pickImage = async (setImage: any) => {
+export const pickImage = async (setImage: any, aspect?: [number, number]) => {
   // No permissions request is necessary for launching the image library
   let result = await ImagePicker.launchImageLibraryAsync({
     mediaTypes: ImagePicker.MediaTypeOptions.Images,
     allowsEditing: true,
-    aspect: [4, 3],
+    aspect: aspect ?? [4, 3],
     quality: 1,
   });
 
@@ -42,7 +43,7 @@ export default function CreatePost() {
       ) : (
         <View className="w-72 aspect-square rounded-lg bg-slate-300"></View>
       )}
-      <Text onPress={pickImage} className="p-2 text-blue-500">
+      <Text onPress={() => { pickImage(setImage) }} className="p-2 text-blue-500">
         Add Photo
       </Text>
 
@@ -53,16 +54,8 @@ export default function CreatePost() {
         placeholder="Write a caption..."
       />
 
-      <View className="mt-auto w-full">
-        <Pressable
-          onPress={() => {
-            console.log("Posted!");
-          }}
-          className="bg-blue-500 w-full p-3 rounded-lg items-center"
-        >
-          <Text className="text-white font-semibold">Post!</Text>
-        </Pressable>
-      </View>
+      <DefaultButton title="Post!" pressAction={()=> { console.log("Post Button Pressed. ") }}/>
+        
     </View>
   );
 }
