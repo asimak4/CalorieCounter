@@ -1,11 +1,10 @@
-import { Image, View, Text, TextInput, Pressable } from "react-native";
+import { Image, View, Text, TextInput } from "react-native";
 import { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import DefaultButton from "~/src/components/Button";
+import { uploadImage } from "~/src/lib/cloudinary";
 
-{
-  /* bg-slate-600 flex-1 items-center justify-center m-6 */
-}
+/* bg-slate-600 flex-1 items-center justify-center m-6 */
 
 export const pickImage = async (setImage: any, aspect?: [number, number]) => {
   // No permissions request is necessary for launching the image library
@@ -13,7 +12,7 @@ export const pickImage = async (setImage: any, aspect?: [number, number]) => {
     mediaTypes: ImagePicker.MediaTypeOptions.Images,
     allowsEditing: true,
     aspect: aspect ?? [4, 3],
-    quality: 1,
+    quality: 0.75,
   });
 
   console.log(result);
@@ -33,6 +32,16 @@ export default function CreatePost() {
     }
   }, [image]);
 
+  const createPost = async () => {
+    if(!image){
+        return;
+    }
+    // upload image to cloudinary
+    const response = await uploadImage(image);
+    console.log("Image ID: ", response?.public_id)
+    // save the post in database
+  };
+
   return (
     <View className="p-3 items-center flex-1">
       {image ? (
@@ -43,7 +52,12 @@ export default function CreatePost() {
       ) : (
         <View className="w-72 aspect-square rounded-lg bg-slate-300"></View>
       )}
-      <Text onPress={() => { pickImage(setImage) }} className="p-2 text-blue-500">
+      <Text
+        onPress={() => {
+          pickImage(setImage);
+        }}
+        className="p-2 text-blue-500"
+      >
         Add Photo
       </Text>
 
@@ -54,8 +68,7 @@ export default function CreatePost() {
         placeholder="Write a caption..."
       />
 
-      <DefaultButton title="Post!" pressAction={()=> { console.log("Post Button Pressed. ") }}/>
-        
+      <DefaultButton title="Post!" pressAction={createPost} />
     </View>
   );
 }
