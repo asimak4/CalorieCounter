@@ -35,27 +35,27 @@ export default function PostListItem({ post }: PostListItemProps ){
     postAvatar.resize(thumbnail().width(48).height(48).gravity(focusOn(face())))
 
     return(
-        <View className="bg-white">
+        <View className="bg-black">
         {/* Header*/}
         <View className="p-2 flex-row items-center gap-2">
           <AdvancedImage
             cldImg={postAvatar}
             className="w-12 aspect-square rounded-full"
           />
-          <Text className="font-semibold">{post.user.username}</Text>
+          <Text className="text-white font-semibold">{post.user.username}</Text>
         </View>
         
         <AdvancedImage cldImg={postImage} className="w-full aspect-[4/3]"/>
 
         <View className="p-2">
-          <Text>
+          <Text className="text-white">
               {post.caption}
           </Text>
         </View>
         <View className="flex-row gap-3 p-2">
-          <AntDesign name="hearto" size={20}/>
-          <Ionicons name="chatbubble-outline" size={20}/>
-          <Ionicons className="ml-auto" name="accessibility-outline" size={20}/>
+          <AntDesign name="hearto" size={20} color={'white'}/>
+          <Ionicons name="chatbubble-outline" size={20} color={'white'}/>
+          <Ionicons className="ml-auto" name="accessibility-outline" size={20} color={'white'}/>
         </View>
       </View>
     )

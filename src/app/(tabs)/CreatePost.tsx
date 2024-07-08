@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import DefaultButton from "~/src/components/Button";
 import { uploadImage } from "~/src/lib/cloudinary";
+import { supabase } from "~/src/lib/supabase";
+import { useAuth } from "~/src/providers/AuthProvider";
+import { router } from "expo-router";
 
 /* bg-slate-600 flex-1 items-center justify-center m-6 */
 
@@ -18,13 +21,16 @@ export const pickImage = async (setImage: any, aspect?: [number, number]) => {
   console.log(result);
 
   if (!result.canceled) {
-    setImage(result.assets[0].uri);
+    const resultUri = result.assets[0].uri;
+    setImage(resultUri);
   }
 };
 
 export default function CreatePost() {
   const [caption, setCaption] = useState<string>("");
   const [image, setImage] = useState<null | string>(null);
+
+  const {session} = useAuth();
 
   useEffect(() => {
     if (!image) {
@@ -40,6 +46,15 @@ export default function CreatePost() {
     const response = await uploadImage(image);
     console.log("Image ID: ", response?.public_id)
     // save the post in database
+
+    const { data, error } = await supabase
+    .from('posts')
+    .insert([
+      { caption, image: response?.public_id, user_id: session?.user?.id },
+    ])
+    .select()
+            
+    router.push('/(tabs)')
   };
 
   return (

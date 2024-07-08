@@ -1,29 +1,53 @@
-import { Pressable, Text, View } from "react-native";
+import React from 'react';
+import { Pressable, Text, StyleSheet, PressableProps, TextStyle, ViewStyle } from 'react-native';
 
-type DefaultButtonProps = {
+const styles = StyleSheet.create({
+  pressable: {
+    backgroundColor: '#3b82f6',
+    height: 50,
+    width: 200,
+    padding: 12,
+    borderRadius: 30,
+    justifyContent: 'center', // Center content vertically
+    alignItems: 'center', // Center content horizontally
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center', // Center text inside the Text component
+  },
+});
+
+interface CustomButtonProps extends PressableProps {
   title: string;
-  pressAction: any;
-  otherAction?: any;
-};
+  pressAction: () => void;
+  otherAction?: () => void;
+  buttonStyles?: ViewStyle;
+  textStyles?: TextStyle;
+}
 
-export default function DefaultButton({
+const CustomButton: React.FC<CustomButtonProps> = ({
   title,
   pressAction,
   otherAction,
-}: DefaultButtonProps) {
+  buttonStyles,
+  textStyles,
+  ...props
+}) => {
   return (
-    <View className="mt-auto w-full">
-      <Pressable
-        onPress={() => {
-          pressAction();
-          if (otherAction) {
-            otherAction();
-          }
-        }}
-        className="bg-blue-500 w-full p-3 rounded-lg items-center"
-      >
-        <Text className="text-white font-semibold">{title}</Text>
-      </Pressable>
-    </View>
+    <Pressable
+      onPress={() => {
+        pressAction();
+        if (otherAction) {
+          otherAction();
+        }
+      }}
+      style={[styles.pressable, buttonStyles]}
+      {...props}
+    >
+      <Text style={[styles.buttonText, textStyles]}>{title}</Text>
+    </Pressable>
   );
-}
+};
+
+export default CustomButton;
